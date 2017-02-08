@@ -1,0 +1,42 @@
+From: E-Sport 42 Signup Service <<%=sender%>>
+To: <%=member.givenName%> <%=member.surname%> <<%=member.email%>>
+Date: <% (new Date()).toString().replace(/(?:([A-Za-z]{3}) ){2}([0-9]{2}) ([0-9]{4}) ([0-9]{2}(?::[0-9]{2}){2}) [A-Za-z]*([+-][0-9]{4}).*/g, '$1, $3 $2 $4 $5') %>
+Subject: =?utf-8?Q?Confirmation_d'adh=C3=A9sion_=C3=A0_E-Sport_42?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Bonjour,
+
+Merci de ton adh=C3=A9sion =C3=A0 l'association E-Sport 42.
+
+Nous t'avons cr=C3=A9=C3=A9 un compte Google E-Sport 42, voici tes identifi=
+ants.
+
+    Adresse e-mail : <%=member.googleUser%>
+    Mot de passe :   <%=member.password%>
+
+Les messages de l'association te seront envoy=C3=A9s sur cette adresse,
+pense =C3=A0 la consulter r=C3=A9guli=C3=A8rement. Si tu le souhaites, tu p=
+eux
+mettre en place une redirection vers une autre adresse, clique sur ce
+lien https://goo.gl/dKCjSi pour savoir comment faire.
+
+Ce compte te permet =C3=A9galement d'accéder au slack de l'association :
+https://slack.esport42.fr
+Nous avons aussi un salon public sur le slack de 42: #esport42,
+n'hésite pas =C3=A0 le rejoindre si ce n'est pas d=C3=A9j=C3=A0 fait.
+
+Nous avons =C3=A9galement un discord : <%=discordUrl%>
+Et un groupe steam : https://steamcommunity.com/groups/esport42
+Demande à un secr=C3=A9taire pour y =C3=AAtre ajout=C3=A9.
+
+Tu peux aussi nous suivre sur les r=C3=A9seaux sociaux :
+Facebook: https://www.facebook.com/esport42
+Twitter: https://twitter.com/esport42
+<% if (member.soge) { %>
+Tu as demand=C3=A9 =C3=A0 recevoir des informations sur le partenariat avec=
+ la
+Soci=C3=A9t=C3=A9 G=C3=A9n=C3=A9rale, elles te seront envoy=C3=A9es dans un=
+ e-mail s=C3=A9par=C3=A9.
+<% } %>

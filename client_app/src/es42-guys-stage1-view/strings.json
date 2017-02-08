@@ -1,0 +1,21 @@
+{
+	"en": {
+		"heading.stage1": "Join E-Sport 42",
+		"content.pre-signup-information": "Signing up is free and carries no obligations. By signing up you agree to the",
+		"content.statutes-link": "statutes of the association",
+		"content.ft-data-import": "We need access to your 42 account to check your student status and pre-fill the form. After clicking the sign-up button, you will be redirected to 42's site to grant access.",
+		"ui.action.signup-start": "Join E-Sport 42",
+		"msg.error.ft-auth-denied": "Resource owner denied access :(",
+		"msg.error.ftme-rq-error": "{error, select, invalid_authorization_code {Invalid authorization code} calm_down {Calm down! Are you trying to bring the servers down?} server_error {Application error (error ID: {errorId})} other {Error due to writing code at 5 am without coffee (this is a bug)}}"
+	},
+
+	"fr": {
+		"heading.stage1": "Rejoindre E-Sport 42",
+		"content.pre-signup-information": "L'adhésion est gratuite et n'engage à rien. En adhérant, tu accepte les",
+		"content.statutes-link": "statuts de l'association",
+		"content.ft-data-import": "Nous avons besoin d'accéder à ton compte 42 pour vérifier ton statut d'étudiant et pré-remplir le formulaire. Après avoir cliqué sur le bouton d'inscription, tu vas être redirigé vers le site de 42 pour autoriser l'accès.",
+		"ui.action.signup-start": "Rejoindre E-Sport 42",
+		"msg.error.ft-auth-denied": "Le proprétaire de la ressource a refusé l'accès :(",
+		"msg.error.ftme-rq-error": "{error, select, invalid_authorization_code {Code d'autorisation invalide} calm_down {Du calme ! Tu veux faire planter les serveurs ?} server_error {Erreur de l'application (identifiant de l'erreur: {errorId})} other {Erreur due à l'écriture de code à 5h du matin sans café (ceci est un bug)}}"
+	}
+}

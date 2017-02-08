@@ -1,0 +1,277 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/app-localize-behavior/app-localize-behavior.html" />
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../../bower_components/iron-form/iron-form.html" />
+<link rel="import" href="../../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html" />
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html" />
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html" />
+<link rel="import" href="../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html" />
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html" />
+<link rel="import" href="../../bower_components/paper-styles/typography.html" />
+<link rel="import" href="../country-input/country-input.html" />
+<link rel="import" href="../birthdate-validator/birthdate-validator.html" />
+<link rel="import" href="../postcode-validator/postcode-validator.html" />
+
+<dom-module id="es42-guys-stage2-view">
+	<template>
+		<style include="iron-flex iron-flex-factors">
+			paper-card {
+				max-width: 800px;
+				margin: 0 12px 48px 12px;
+			}
+
+			h2 {
+				@apply(--paper-font-title);
+			}
+
+			.layout.horizontal paper-input {
+				margin: 0 2px;
+			}
+
+			.indent {
+				margin-left: 20px;
+			}
+
+			#error {
+				color: var(--error-color);
+			}
+		</style>
+
+		<birthdate-validator></birthdate-validator>
+		<postcode-validator country="[[_country]]"></postcode-validator>
+
+		<paper-card heading="[[localize('heading.stage2')]]">
+			<div class="card-content">
+				<form is="iron-form" id="signup-form" method="POST" action="[[apiBaseUri]]/member" content-type="application/json" on-iron-form-submit="_signupFormSubmitted" on-iron-form-response="_signupResponse" on-iron-form-error="_signupError">
+					<input type="hidden" name="signupKey" value="[[ftUser.signupKey]]" />
+
+					<h2>[[localize('heading.form-section.personal-data')]]</h2>
+					<p>
+						<paper-input name="xlogin"
+							label="[[localize('ui.input.text.xlogin')]]"
+							value="[[ftUser.xlogin]]"
+							readonly
+						></paper-input>
+
+						<div class="layout horizontal">
+							<paper-input
+								class="flex-6"
+								label="[[localize('ui.input.text.givenName')]]"
+								value="[[ftUser.givenName]]"
+								readonly
+							></paper-input>
+
+							<paper-input
+								class="flex-6"
+								label="[[localize('ui.input.text.surname')]]"
+								value="[[ftUser.surname]]"
+								readonly
+							></paper-input>
+						</div>
+
+						<paper-input name="birthdate" type="date"
+							label="[[localize('ui.input.date.birthdate')]]"
+							required
+							validator="birthdate-validator"
+							on-blur="_validate"
+							error-message="[[localize('msg.error.invalid-birthdate')]]"
+						></paper-input>
+					</p>
+
+					<h2>[[localize('heading.form-section.postal-address')]]</h2>
+					<p>
+						<paper-input name="postalAddress"
+							label="[[localize('ui.input.text.postal-address-1')]]"
+							required
+							on-blur="_validate"
+							error-message="[[localize('msg.error.required-field')]]"
+						></paper-input>
+
+						<paper-input name="postalAddressLine2"
+							label="[[localize('ui.input.text.postal-address-2')]]"
+						></paper-input>
+
+						<div class="layout horizontal">
+							<paper-input name="postcode"
+								class="flex-4"
+								label="[[localize('ui.input.text.postcode')]]"
+								required
+								validator="postcode-validator"
+								on-blur="_validate"
+								error-message="[[localize('msg.error.invalid-postcode')]]"
+							></paper-input>
+
+							<paper-input name="city"
+								class="flex-4"
+								label="[[localize('ui.input.text.city')]]"
+								required
+								on-blur="_validate"
+								error-message="[[localize('msg.error.required-field')]]"
+							></paper-input>
+
+							<country-input name="country"
+								class="flex-4"
+								label="[[localize('ui.input.select.country')]]"
+								value="{{_country}}"
+								required
+								error-message="[[localize('msg.error.required-field')]]"
+								language="[[language]]"
+							></country-input>
+						</div>
+					</p>
+
+					<h2>[[localize('heading.form-section.email')]]</h2>
+					<p>
+						<paper-radio-group selected="emailSelectFt">
+							<paper-radio-button name="emailSelectFt">
+								[[ftUser.email]]
+							</paper-radio-button>
+
+							<paper-radio-button name="emailSelectOther" checked="{{_otherEmailEnabled}}">
+								[[localize('ui.input.select.email.other')]]
+							</paper-radio-button>
+						</paper-radio-group>
+
+						<!-- If you can understand my regexes, send me your resume -->
+						<paper-input name="email"
+							class="indent"
+							label="[[localize('ui.input.text.email')]]"
+							disabled="[[!_otherEmailEnabled]]"
+							hidden="[[!_otherEmailEnabled]]"
+							required="[[_otherEmailEnabled]]"
+							pattern="^(?:[A-Za-z0-9!#$%&amp;'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&amp;'*+\-/=?^_`{|}~]+)*|&quot;(?:[^&quot;\\]|\\.)+&quot;)@(?:[A-Za-z0-9!#$%&amp;'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&amp;'*+\-/=?^_`{|}~]+)*|\[(?:[^[\\\]]|\\.)+\])$"
+							error-message="[[localize('msg.error.invalid-email')]]"
+							on-blur="_validate"
+						></paper-input>
+					</p>
+
+					<h2>[[localize('heading.form-section.additional-data')]]</h2>
+					<p>
+						<paper-input name="nick"
+							label="[[localize('ui.input.text.nick')]]"
+						></paper-input>
+
+						<paper-input name="phone"
+							label="[[localize('ui.input.text.phone')]]"
+							value="[[ftUser.phone]]"
+							pattern="^(?:(?:(?:0|\+33)[1-79][0-9]{8})|\+(?!33)[0-9]{4,15})$"
+							error-message="[[localize('msg.error.invalid-phone')]]"
+							on-blur="_validate"
+						></paper-input>
+
+						<paper-input name="steam"
+							label="[[localize('ui.input.text.steam')]]"
+						></paper-input>
+					</p>
+
+					<h2>[[localize('heading.form-section.soge')]]</h2>
+					<p>
+						[[localize('content.soge-1')]]
+						([[localize('content.soge-link-label')]]
+						<a href="http://go.esport42.fr/soge42">http://go.esport42.fr/soge42</a><br />
+						[[localize('content.soge-2')]]<br />
+					</p>
+
+					<p>
+						<paper-toggle-button name="soge">
+							[[localize('ui.input.bool.soge')]]
+						</paper-toggle-button>
+					</p>
+
+					<p id="error"></p>
+
+					<paper-button id="submit-btn" on-tap="_submitSignupForm">
+						[[localize('ui.action.signup')]]
+					</paper-button>
+
+					<paper-spinner-lite id="spinner"></paper-spinner-lite>
+				</form>
+			</div>
+		</paper-card>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'es42-guys-stage2-view',
+
+			behaviors: [
+				Polymer.AppLocalizeBehavior
+			],
+
+			properties: {
+				apiBaseUri: {
+					type: String
+				},
+
+				ftUser: {
+					type: Object,
+					observer: '_storeFtUser',
+					value: function() { return JSON.parse(window.sessionStorage.getItem('es42-guys.ftUser')); }
+				},
+
+				member: {
+					type: Object,
+					notify: true
+				},
+
+				_country: {
+					type: String,
+					value: 'FR'
+				},
+
+				language: {
+					type: String,
+					value: 'en'
+				},
+
+				useKeyIfMissing: {
+					type: Boolean,
+					value: true
+				}
+			},
+
+			_storeFtUser: function(ftUser) {
+				if (ftUser === null)
+					this.fire('game-over');
+				window.sessionStorage.setItem('es42-guys.ftUser', JSON.stringify(ftUser));
+			},
+
+			_validate: function(e) {
+				e.target.validate();
+			},
+
+			_submitSignupForm: function() {
+				this.$['signup-form'].submit();
+			},
+
+			_signupFormSubmitted: function() {
+				this.$['error'].textContent = '';
+				this.$['submit-btn'].disabled = true;
+				this.$['spinner'].active = true;
+			},
+
+			_signupResponse: function(e) {
+				this.member = e.detail.response;
+				this.fire('stage-complete');
+				this.$['spinner'].active = false;
+				this.$['submit-btn'].disabled = false;
+			},
+
+			_signupError: function(e) {
+				this.$['error'].textContent = this.localize('msg.error.signup-error',
+						'error', e.detail.request.response.error,
+						'errorId', e.detail.request.response.id || '');
+				this.$['spinner'].active = false;
+				this.$['submit-btn'].disabled = false;
+			},
+
+			attached: function() {
+				this.loadResources(this.resolveUrl('strings.json'));
+			}
+		});
+	</script>
+</dom-module>
+

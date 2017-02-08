@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/app-localize-behavior/app-localize-behavior.html" />
+<link rel="import" href="../../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../../bower_components/paper-styles/typography.html" />
+
+<dom-module id="es42-guys-gg-view">
+	<template>
+		<style>
+			paper-card {
+				max-width: 800px;
+				margin: 0 12px 48px 12px;
+			}
+
+			h2 {
+				@apply(--paper-font-title);
+			}
+		</style>
+
+		<paper-card heading="[[localize('heading.gg')]]">
+			<div class="card-content">
+				<p>
+					[[localize('content.welcome')]]
+				</p>
+
+				<h2>[[localize('heading.section.google-account')]]</h2>
+				<p>
+					[[localize('content.google-account-1')]]
+					<ul>
+						<li>[[localize('label.text.google-user', 'value', member.googleUser)]]</li>
+						<li>[[localize('content.google-password')]]</li>
+					</ul>
+					[[localize('content.google-account-2.pre')]]
+					<a href="https://goo.gl/dKCjSi">[[localize('content.google-account-2.link')]]</a>.
+				</p>
+
+				<h2>[[localize('heading.section.slack')]]</h2>
+				<p>
+					[[localize('content.slack.pre')]]
+					<a href="https://slack.esport42.fr">https://slack.esport42.fr</a>
+					[[localize('content.slack.post')]]
+				</p>
+
+				<h2>[[localize('heading.section.discord-steam')]]</h2>
+				<p>
+					[[localize('content.discord.pre')]]
+					<a href="https://discord.gg/QWW2qZY">https://discord.gg/QWW2qZT</a>
+					[[localize('content.steam-group.pre')]]
+					<a href="https://steamcommunity.com/groups/esport42">https://steamcommunity.com/groups/esport42</a>
+					[[localize('content.steam-group.post')]]
+				</p>
+
+				<h2>[[localize('heading.section.social')]]</h2>
+				<p>
+					[[localize('content.social')]]
+					<ul>
+						<li>[[localize('content.social-fb.pre')]]<a href="https://www.facebook.com/esport42">https://www.facebook.com/esport42</a></li>
+						<li>[[localize('content.social-tw.pre')]]<a href="https://twitter.com/esport42">https://twitter.com/esport42</a></li>
+					</ul>
+				</p>
+			</div>
+		</paper-card>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'es42-guys-gg-view',
+
+			behaviors: [
+				Polymer.AppLocalizeBehavior
+			],
+
+			properties: {
+				member: {
+					type: Object,
+					observer: '_storeMember',
+					value: function() { return JSON.parse(window.sessionStorage.getItem('es42-guys.member')); }
+				},
+
+				language: {
+					type: String,
+					value: 'en'
+				},
+
+				useKeyIfMissing: {
+					type: Boolean,
+					value: true
+				}
+			},
+
+			_storeMember: function(member) {
+				if (member === null)
+					this.fire('game-over');
+				window.sessionStorage.setItem('es42-guys.member', JSON.stringify(member));
+			},
+
+			attached: function() {
+				this.loadResources(this.resolveUrl('strings.json'));
+			}
+		});
+	</script>
+</dom-module>
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
+		<meta name="theme-color" content="#3f51b5" />
+
+		<link rel="manifest" href="/manifest.json" />
+
+		<link rel="icon" sizes="48x48" href="/images/icon-48x48.png" />
+		<link rel="icon" sizes="72x72" href="/images/icon-72x72.png" />
+		<link rel="icon" sizes="96x96" href="/images/icon-96x96.png" />
+		<link rel="icon" sizes="144x144" href="/images/icon-144x144.png" />
+		<link rel="icon" sizes="192x192" href="/images/icon-192x192.png" />
+
+		<title>Join E-Sport 42</title>
+
+		<script>
+			window.Polymer = {
+				dom: 'shadow',
+				lazyRegister: true,
+				useNativeCSSProperties: true
+			};
+
+			document.addEventListener('DOMContentLoaded', function() {
+				if (!('registerElement' in document)
+						|| !('import' in document.createElement('link'))
+						|| !('content' in document.createElement('template'))) {
+					var wc = document.createElement('script');
+					wc.setAttribute('src', '/bower_components/webcomponentsjs/webcomponents-lite.min.js');
+					document.body.appendChild(wc);
+				}
+
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('/service-worker.js');
+				}
+			});
+		</script>
+
+		<link rel="import" href="/bower_components/polymer/polymer.html" />
+		<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html" />
+		<link rel="import" href="/src/es42-guys-app/es42-guys-app.html" />
+
+		<style is="custom-style">
+			body {
+				height: 100vh;
+			}
+
+			:root {
+				--primary-color: var(--paper-indigo-500);
+				--light-primary-color: var(--paper-indigo-300);
+				--dark-primary-color: var(--paper-indigo-700);
+				--primary-background-color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>It looks like your browser is from an age when the Internet did not exist.</noscript>
+
+		<template is="dom-bind">
+			<iron-ajax url="/app-config.json" auto handle-as="json" last-response="{{appConfig}}"></iron-ajax>
+
+			<es42-guys-app config="[[appConfig]]"></es42-guys-app>
+		</template>
+	</body>
+</html>
+<!-- Made with Polymer and a lot of methyltheobromine by aspeer for E-Sport 42 -->

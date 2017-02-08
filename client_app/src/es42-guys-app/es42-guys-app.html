@@ -1,0 +1,116 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/app-route/app-location.html" />
+<link rel="import" href="../../bower_components/app-route/app-route.html" />
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html" />
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html" />
+<link rel="import" href="../../bower_components/paper-styles/color.html" />
+<link rel="import" href="../../bower_components/paper-styles/typography.html" />
+
+<dom-module id="es42-guys-app">
+	<template>
+		<style include="iron-flex">
+			:host {
+				color: var(--primary-text-color);
+				background-color: var(--primary-background-color);
+				@apply(--paper-font-body1);
+			}
+
+			iron-pages {
+				height: 100%;
+			}
+		</style>
+
+		<app-location route="{{_route}}" query-params="{{_query}}"></app-location>
+		<app-route route="{{_route}}" pattern="/:page" data="{{_routeData}}"></app-route>
+
+		<div class="layout vertical center-center">
+			<img src="[[resolveUrl('images/es42-logo.png')]]" />
+
+			<iron-pages selected="[[_routeData.page]]" attr-for-selected="name">
+				<es42-guys-stage1-view name="stage1" language="[[language]]"
+					api-base-uri="[[config.apiBaseUri]]"
+					ft-api-client-id="[[config.ftApiClientId]]"
+					ft-auth-code="[[_query.code]]"
+					error="[[_query.error]]"
+					ft-user="{{_ftUser}}"
+					on-stage-complete="_stage1Complete"
+				></es42-guys-stage1-view>
+
+				<es42-guys-stage2-view name="stage2" language="[[language]]"
+					api-base-uri="[[config.apiBaseUri]]"
+					ft-user="[[_ftUser]]"
+					member="{{_member}}"
+					on-stage-complete="_stage2Complete"
+					on-game-over="_gameOver"
+				></es42-guys-stage2-view>
+
+				<es42-guys-gg-view name="gg" language="[[language]]"
+					member="[[_member]]"
+					on-game-over="_gameOver"
+				></es42-guys-gg-view>
+			</iron-pages>
+		</div>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'es42-guys-app',
+
+			properties: {
+				config: {
+					type: Object
+				},
+
+				language: {
+					type: String,
+					value: function() {
+						var supportedLanguages = ['en', 'fr'];
+
+						if ('languages' in navigator) {
+							for (var i = 0; i < navigator.languages.length; ++i) {
+								if (supportedLanguages.indexOf(navigator.languages[i]) != -1)
+									return navigator.languages[i];
+							}
+						}
+
+						return 'en';
+					}
+				}
+			},
+
+			observers: [
+				'_pageChanged(_routeData.page)',
+				'_languageChanged(_query.language)'
+			],
+
+			_pageChanged: function(page) {
+				if (page == '')
+					this.set('_route.path', '/stage1');
+				else
+					this.importHref(this.resolveUrl('../es42-guys-' + page + '-view/es42-guys-' + page + '-view.html'), null, null, true);
+			},
+
+			_languageChanged: function(language) {
+				var supportedLanguages = ['en', 'fr'];
+
+				if (supportedLanguages.indexOf(language) != -1)
+					this.language = language;
+			},
+
+			_stage1Complete: function(e) {
+				this.set('_query.code', null);
+				this.set('_route.path', '/stage2');
+			},
+
+			_stage2Complete: function(e) {
+				this.set('_route.path', '/gg');
+			},
+
+			_gameOver: function(e) {
+				this.set('_route.path', '/stage1');
+			}
+		});
+	</script>
+</dom-module>
+

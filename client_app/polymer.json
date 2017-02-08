@@ -1,0 +1,19 @@
+{
+	"entrypoint": "index.html",
+	"shell": "src/es42-guys-app/es42-guys-app.html",
+	"fragments": [
+		"src/es42-guys-stage1-view/es42-guys-stage1-view.html",
+		"src/es42-guys-stage2-view/es42-guys-stage2-view.html",
+		"src/es42-guys-gg-view/es42-guys-gg-view.html"
+	],
+	"sources": [
+		"src/**/*",
+		"images/**/*",
+		"bower.json"
+	],
+	"includeDependencies": [
+		"manifest.json",
+		"app-config.json",
+		"bower_components/webcomponentsjs/webcomponents-lite.min.js"
+	]
+}

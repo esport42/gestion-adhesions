@@ -1,0 +1,45 @@
+{
+	"en": {
+		"heading.gg": "GG!",
+		"heading.section.google-account": "Your Google account",
+		"heading.section.slack": "Our Slack",
+		"heading.section.discord-steam": "Discord and Steam group",
+		"heading.section.social": "Our social media",
+		"content.welcome": "Thank you for joining us.",
+		"label.text.google-user": "E-mail address: {value}",
+		"content.google-account-1": "We created you an E-Sport 42 Google account, here are your login information:",
+		"content.google-password": "Your password was sent to you by e-mail",
+		"content.google-account-2.pre": "E-mails from us will be sent to this address, remember to check it frequently. If you want, you can",
+		"content.google-account-2.link": "set up a redirect to another address",
+		"content.slack.pre": "This account also gives you access to our Slack: ",
+		"content.slack.post": ". We also have a public channel on 42's slack: #esport42, join it if not already.",
+		"content.discord.pre": "We also have a Discord server: ",
+		"content.steam-group.pre": " and a Steam group: ",
+		"content.steam-group.post": ". Ask a secretary to be added.",
+		"content.social": "You may also want to follow us on social media:",
+		"content.social-fb.pre": "Facebook: ",
+		"content.social-tw.pre": "Twitter: "
+	},
+
+	"fr": {
+		"heading.gg": "GG !",
+		"heading.section.google-account": "Ton compte Google",
+		"heading.section.slack": "Le Slack",
+		"heading.section.discord-steam": "Le Discord et le groupe Steam",
+		"heading.section.social": "Nos réseaux sociaux",
+		"content.welcome": "Merci de ton adhésion à l'association E-Sport 42.",
+		"label.text.google-user": "Adresse e-mail : {value}",
+		"content.google-account-1": "Nous t'avons créé un compte Google E-Sport 42, voici tes identifiants :",
+		"content.google-password": "Ton mot de passe t'a été envoyé par e-mail",
+		"content.google-account-2.pre": "Les messages de l'association te seront envoyés sur cette adresse, pense à la consulter régulièrement. Si tu le souhaites, tu peux ",
+		"content.google-account-2.link": "mettre en place une redirection vers une autre adresse",
+		"content.slack.pre": "Ce compte te permet également d'accéder au Slack de l'association : ",
+		"content.slack.post": ". Nous avons aussi un salon public sur le Slack de 42: #esport42, n'hésite pas à le rejoindre si ce n'est pas déjà fait.",
+		"content.discord.pre": "Nous avons également un Discord : ",
+		"content.steam-group.pre": " et un groupe Steam : ",
+		"content.steam-group.post": ". Demande à un secrétaire pour y être ajouté.",
+		"content.social": "Tu peux aussi nous suivre sur les réseaux sociaux :",
+		"content.social-fb.pre": "Facebook : ",
+		"content.social-tw.pre": "Twitter : "
+	}
+}

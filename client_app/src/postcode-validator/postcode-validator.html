@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/iron-validator-behavior/iron-validator-behavior.html" />
+
+<dom-module id="postcode-validator">
+	<script>
+		Polymer({
+			is: 'postcode-validator',
+
+			behaviors: [
+				Polymer.IronValidatorBehavior
+			],
+
+			properties: {
+				country: {
+					type: String,
+					value: ''
+				}
+			},
+
+			validate: function(value) {
+				return (this.country != 'FR' || /^[0-9]{5}$/.test(value));
+			}
+		});
+	</script>
+</dom-module>
+

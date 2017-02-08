@@ -1,0 +1,163 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/app-localize-behavior/app-localize-behavior.html" />
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="../../bower_components/iron-form/iron-form.html" />
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html" />
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html" />
+
+<dom-module id="es42-guys-stage1-view">
+	<template>
+		<style include="iron-flex">
+			paper-card {
+				max-width: 800px;
+				margin: 0 12px 48px 12px;
+			}
+
+			a.nolinkstyle {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			#signup-btn {
+				--paper-button: {
+					background: var(--primary-color);
+					color: #ffffff;
+				}
+			}
+
+			paper-spinner-lite {
+				--paper-spinner-color: var(--primary-color);
+			}
+
+			#error {
+				color: var(--error-color);
+			}
+		</style>
+
+		<iron-ajax id="ftme-rq"
+			url="[[apiBaseUri]]/ftuser/me"
+			handle-as="json"
+			last-response="{{ftUser}}"
+			on-response="_ftmeResponse"
+			last-error="{{_ftmeLastError}}"
+		></iron-ajax>
+
+		<paper-card heading="[[localize('heading.stage1')]]">
+			<div class="card-content">
+				<p>
+					[[localize('content.pre-signup-information')]]
+					<a href="https://drive.google.com/file/d/0B359kAkCGixmX1J3dFNnV2pmNTQ/view">[[localize('content.statutes-link')]]</a>.
+				</p>
+
+				<p>[[localize('content.ft-data-import')]]</p>
+
+				<p id="error"></p>
+
+				<p class="layout vertical center">
+					<paper-spinner-lite id="spinner"></paper-spinner-lite>
+					<a class="nolinkstyle" href="https://api.intra.42.fr/oauth/authorize?client_id=[[ftApiClientId]]&redirect_uri=[[_encodeURIComponent(_ftRedirectUri)]]&response_type=code" tabindex="-1">
+						<paper-button id="signup-btn" raised>
+							[[localize('ui.action.signup-start')]]
+						</paper-button>
+					</a>
+				</p>
+			</div>
+		</paper-card>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'es42-guys-stage1-view',
+
+			behaviors: [
+				Polymer.AppLocalizeBehavior
+			],
+
+			properties: {
+				apiBaseUri: {
+					type: String
+				},
+
+				ftApiClientId: {
+					type: String
+				},
+
+				ftAuthCode: {
+					type: String
+				},
+
+				error: {
+					type: String
+				},
+
+				ftUser: {
+					type: Object,
+					notify: true
+				},
+
+				_ftRedirectUri: {
+					type: String,
+					value: function() { return window.location.origin + '/stage1'; }
+				},
+
+				language: {
+					type: String,
+					value: 'en'
+				},
+
+				useKeyIfMissing: {
+					type: Boolean,
+					value: true
+				}
+			},
+
+			observers: [
+				'_errorChanged(error, localize)',
+				'_ftmeError(_ftmeLastError, localize)'
+			],
+
+			_encodeURIComponent: function(uric) {
+				return encodeURIComponent(uric);
+			},
+
+			_errorChanged: function(error) {
+				if (error == 'access_denied')
+					this.$['error'].textContent = this.localize('msg.error.ft-auth-denied');
+			},
+
+			_ftmeResponse: function() {
+				this.fire('stage-complete');
+				this.$['spinner'].active = false;
+				this.$['signup-btn'].hidden = false;
+			},
+
+			_ftmeError: function(error) {
+				if (error === null) return;
+
+				this.$['error'].textContent = this.localize('msg.error.ftme-rq-error',
+						'error', error.response.error,
+						'errorId', error.response.id || '');
+				this.$['spinner'].active = false;
+				this.$['signup-btn'].hidden = false;
+			},
+
+			attached: function() {
+				this.loadResources(this.resolveUrl('strings.json'));
+
+				if (typeof this.ftAuthCode !== 'undefined' && this.ftAuthCode != '') {
+					this.$['signup-btn'].hidden = true;
+					this.$['spinner'].active = true;
+					this.$['ftme-rq'].params = {
+						ftAuthCode: this.ftAuthCode,
+						ftRedirectUri: this._ftRedirectUri
+					};
+					this.$['ftme-rq'].generateRequest();
+				}
+			}
+		});
+	</script>
+</dom-module>
+
