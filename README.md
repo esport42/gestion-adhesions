@@ -91,8 +91,8 @@ npm config set es42-guys:OPTION VALUE
 | app\_prefix | URL path prefix the client app is served on and configured for. If unset, the app is served on root (/). Note that having the client app on a prefix is experimental and unsupported. | none |
 | api\_request\_limit | Maximum number of requests a single client (IP address) can make to the API over a `api_request_limit_period` seconds period. 0 disables rate limiting. | 20 |
 | api\_request\_limit\_period | Time period in seconds during which a single client cannot make more requests than `api_request_limit`. | 60 |
-| api\_request\_limit\_ban\_threshold | Clients that make more than this number of requests during the period are banned. | 120 |
-| api\_request\_limit\_ban\_duration | Time after which bans expire. | 86400 |
+| api\_request\_limit\_ban\_threshold | Clients that make more than this number of requests during the period are banned. 0 disables it. | 120 |
+| api\_request\_limit\_ban\_duration | Time in seconds after which bans expire. | 86400 |
 
 After making changes to the `app_prefix` or `ft_client_id` options, it is
 necessary to rebuild the client app. The install scripts take care of it
