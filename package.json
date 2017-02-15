@@ -20,6 +20,7 @@
     "port": "443",
     "insecure_port": "80",
     "app_prefix": "",
+	"serve_app": "true",
     "ft_client_id": "",
     "ft_client_secret": "",
     "google_domain": "esport42.fr",

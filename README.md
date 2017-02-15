@@ -89,6 +89,7 @@ npm config set es42-guys:OPTION VALUE
 | port | HTTPS port, on which the app and api are served. If unset, HTTPS is disabled. | 443 |
 | insecure\_port | Plain HTTP port. Requests to this port are redirected to HTTPS, no actual content is served over plain HTTP unless HTTPS is disabled. Note that serving content over plain HTTP is only intended for serving this app behind a reverse proxy and is unsupported and insecure in any other cases. If unset, plain HTTP is disabled. | 80 |
 | app\_prefix | URL path prefix the client app is served on and configured for. If unset, the app is served on root (/). Note that having the client app on a prefix is experimental and unsupported. | none |
+| serve\_app | If set to false, the client app is not served. Note that you still need to set the necessary options and run the install or rebuild-client-app scripts if you want to serve the app from another server. Also, the API server currently does not set CORS headers, so it only works if the API and client app are served from the same origin (e.g. with a reverse proxy). | true |
 | api\_request\_limit | Maximum number of requests a single client (IP address) can make to the API over a `api_request_limit_period` seconds period. 0 disables rate limiting. | 20 |
 | api\_request\_limit\_period | Time period in seconds during which a single client cannot make more requests than `api_request_limit`. | 60 |
 | api\_request\_limit\_ban\_threshold | Clients that make more than this number of requests during the period are banned. 0 disables it. | 120 |

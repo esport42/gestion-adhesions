@@ -25,14 +25,16 @@ if (process.env.npm_package_config_port) {
 
 app.use('/api', api());
 
-var clientAppPath = fs.existsSync(path.join(__dirname, 'client_app/build/unbundled')) ?
-	path.join(__dirname, 'client_app/build/unbundled') : path.join(__dirname, 'client_app');
+if (process.env.npm_package_config_serve_app) {
+	var clientAppPath = fs.existsSync(path.join(__dirname, 'client_app/build/unbundled')) ?
+		path.join(__dirname, 'client_app/build/unbundled') : path.join(__dirname, 'client_app');
 
-app.use(process.env.npm_package_config_app_prefix || '/', express.static(clientAppPath));
+	app.use(process.env.npm_package_config_app_prefix || '/', express.static(clientAppPath));
 
-app.use(process.env.npm_package_config_app_prefix || '/', function(req, res) {
-	res.sendFile(path.join(clientAppPath, 'index.html'));
-});
+	app.use(process.env.npm_package_config_app_prefix || '/', function(req, res) {
+		res.sendFile(path.join(clientAppPath, 'index.html'));
+	});
+}
 
 if (process.env.npm_package_config_port) {
 	https.createServer({
