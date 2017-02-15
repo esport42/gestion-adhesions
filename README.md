@@ -94,6 +94,16 @@ npm config set es42-guys:OPTION VALUE
 | api\_request\_limit\_ban\_threshold | Clients that make more than this number of requests during the period are banned. | 120 |
 | api\_request\_limit\_ban\_duration | Time after which bans expire. | 86400 |
 
+After making changes to the `app_prefix` or `ft_client_id` options, it is
+necessary to rebuild the client app. The install scripts take care of it
+automatically, but if you change these options after install you must run:
+```
+npm run rebuild-client-app
+```
+If you don't do it, the values used by the client app and the server won't match
+and it will most likely blow up in a few millions pieces, with a small cloud of
+white smoke.
+
 ## Installation
 ```
 npm install

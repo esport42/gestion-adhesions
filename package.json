@@ -11,7 +11,8 @@
     "es42-guys": "./app.js"
   },
   "scripts": {
-    "postinstall": "./scripts/setup-client-app.sh",
+    "postinstall": "./scripts/install-client-app.sh",
+	"rebuild-client-app": "./scripts/rebuild-client-app.sh",
     "start": "node app.js"
   },
   "config": {
