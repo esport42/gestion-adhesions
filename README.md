@@ -86,8 +86,8 @@ npm config set es42-guys:OPTION VALUE
 | Option name | Description | Default value |
 | --- | --- | --- |
 | host | Name or IP address the server should bind to. If unset, the server listens on all interfaces. | none |
-| port | HTTPS port, on which the app and api are served. | 443 |
-| insecure\_port | Plain HTTP port. The app and api are not served from this port, but it redirects (301) requests to the HTTPS port. | 80 |
+| port | HTTPS port, on which the app and api are served. If unset, HTTPS is disabled. | 443 |
+| insecure\_port | Plain HTTP port. Requests to this port are redirected to HTTPS, no actual content is served over plain HTTP unless HTTPS is disabled. Note that serving content over plain HTTP is only intended for serving this app behind a reverse proxy and is unsupported and insecure in any other cases. If unset, plain HTTP is disabled. | 80 |
 | app\_prefix | URL path prefix the client app is served on and configured for. If unset, the app is served on root (/). Note that having the client app on a prefix is experimental and unsupported. | none |
 | api\_request\_limit | Maximum number of requests a single client (IP address) can make to the API over a `api_request_limit_period` seconds period. 0 disables rate limiting. | 20 |
 | api\_request\_limit\_period | Time period in seconds during which a single client cannot make more requests than `api_request_limit`. | 60 |
@@ -100,8 +100,8 @@ automatically, but if you change these options after install you must run:
 ```
 npm run rebuild-client-app
 ```
-If you don't do it, the values used by the client app and the server won't match
-and it will most likely blow up in a few millions pieces, with a small cloud of
+If you don't, the values used by the client app and the server won't match and
+it will most likely blow up in a few millions pieces, with a small cloud of
 white smoke.
 
 ## Installation

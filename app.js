@@ -14,12 +14,14 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.use(function(req, res, next) {
-	if (!req.secure)
-		res.redirect(301, 'https://' + req.hostname + ':' + process.env.npm_package_config_port + req.originalUrl);
+if (process.env.npm_package_config_port) {
+	app.use(function(req, res, next) {
+		if (!req.secure)
+			res.redirect(301, 'https://' + req.hostname + ':' + process.env.npm_package_config_port + req.originalUrl);
 
-	else next();
-});
+		else next();
+	});
+}
 
 app.use('/api', api());
 
@@ -32,15 +34,19 @@ app.use(process.env.npm_package_config_app_prefix || '/', function(req, res) {
 	res.sendFile(path.join(clientAppPath, 'index.html'));
 });
 
-https.createServer({
-	key: fs.readFileSync(path.join(__dirname, 'keys/tls-key.pem')),
-	cert: fs.readFileSync(path.join(__dirname, 'keys/tls-cert.pem'))
-}, app).listen(
-	process.env.npm_package_config_port,
-	process.env.npm_package_config_host
-);
+if (process.env.npm_package_config_port) {
+	https.createServer({
+		key: fs.readFileSync(path.join(__dirname, 'keys/tls-key.pem')),
+		cert: fs.readFileSync(path.join(__dirname, 'keys/tls-cert.pem'))
+	}, app).listen(
+		process.env.npm_package_config_port,
+		process.env.npm_package_config_host
+	);
+}
 
-http.createServer(app).listen(
-	process.env.npm_package_config_insecure_port,
-	process.env.npm_package_config_host
-);
+if (process.env.npm_package_config_insecure_port) {
+	http.createServer(app).listen(
+		process.env.npm_package_config_insecure_port,
+		process.env.npm_package_config_host
+	);
+}
