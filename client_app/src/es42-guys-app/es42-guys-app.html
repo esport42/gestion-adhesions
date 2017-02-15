@@ -22,13 +22,14 @@
 		</style>
 
 		<app-location route="{{_route}}" query-params="{{_query}}"></app-location>
-		<app-route route="{{_route}}" pattern="/:page" data="{{_routeData}}"></app-route>
+		<app-route route="{{_route}}" pattern="[[config.appPrefix]]/:page" data="{{_routeData}}"></app-route>
 
 		<div class="layout vertical center-center">
 			<img src="[[resolveUrl('images/es42-logo.png')]]" />
 
 			<iron-pages selected="[[_routeData.page]]" attr-for-selected="name">
 				<es42-guys-stage1-view name="stage1" language="[[language]]"
+					app-prefix="[[config.appPrefix]]"
 					api-base-uri="[[config.apiBaseUri]]"
 					ft-api-client-id="[[config.ftApiClientId]]"
 					ft-auth-code="[[_query.code]]"
@@ -80,13 +81,13 @@
 			},
 
 			observers: [
-				'_pageChanged(_routeData.page)',
+				'_pageChanged(_routeData.page, config.appPrefix)',
 				'_languageChanged(_query.language)'
 			],
 
 			_pageChanged: function(page) {
 				if (page == '')
-					this.set('_route.path', '/stage1');
+					this.set('_route.path', this.config.appPrefix + '/stage1');
 				else
 					this.importHref(this.resolveUrl('../es42-guys-' + page + '-view/es42-guys-' + page + '-view.html'), null, null, true);
 			},
@@ -100,15 +101,15 @@
 
 			_stage1Complete: function(e) {
 				this.set('_query.code', null);
-				this.set('_route.path', '/stage2');
+				this.set('_route.path', this.config.appPrefix + '/stage2');
 			},
 
 			_stage2Complete: function(e) {
-				this.set('_route.path', '/gg');
+				this.set('_route.path', this.config.appPrefix + '/gg');
 			},
 
 			_gameOver: function(e) {
-				this.set('_route.path', '/stage1');
+				this.set('_route.path', this.config.appPrefix + '/stage1');
 			}
 		});
 	</script>

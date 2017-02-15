@@ -77,6 +77,11 @@
 			],
 
 			properties: {
+				appPrefix: {
+					type: String,
+					value: ''
+				},
+
 				apiBaseUri: {
 					type: String
 				},
@@ -100,7 +105,7 @@
 
 				_ftRedirectUri: {
 					type: String,
-					value: function() { return window.location.origin + '/stage1'; }
+					computed: '_computeFtRedirectUri(appPrefix)'
 				},
 
 				language: {
@@ -118,6 +123,10 @@
 				'_errorChanged(error, localize)',
 				'_ftmeError(_ftmeLastError, localize)'
 			],
+
+			_computeFtRedirectUri: function(prefix) {
+				return window.location.origin + prefix + '/stage1';
+			},
 
 			_encodeURIComponent: function(uric) {
 				return encodeURIComponent(uric);

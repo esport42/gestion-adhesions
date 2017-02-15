@@ -88,6 +88,7 @@ npm config set es42-guys:OPTION VALUE
 | host | Name or IP address the server should bind to. If unset, the server listens on all interfaces. | none |
 | port | HTTPS port, on which the app and api are served. | 443 |
 | insecure\_port | Plain HTTP port. The app and api are not served from this port, but it redirects (301) requests to the HTTPS port. | 80 |
+| app\_prefix | URL path prefix the client app is served on and configured for. If unset, the app is served on root (/). Note that having the client app on a prefix is experimental and unsupported. | none |
 | api\_request\_limit | Maximum number of requests a single client (IP address) can make to the API over a `api_request_limit_period` seconds period. 0 disables rate limiting. | 20 |
 | api\_request\_limit\_period | Time period in seconds during which a single client cannot make more requests than `api_request_limit`. | 60 |
 | api\_request\_limit\_ban\_threshold | Clients that make more than this number of requests during the period are banned. | 120 |

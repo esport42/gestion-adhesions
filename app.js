@@ -26,9 +26,9 @@ app.use('/api', api());
 var clientAppPath = fs.existsSync(path.join(__dirname, 'client_app/build/unbundled')) ?
 	path.join(__dirname, 'client_app/build/unbundled') : path.join(__dirname, 'client_app');
 
-app.use(express.static(clientAppPath));
+app.use(process.env.npm_package_config_app_prefix || '/', express.static(clientAppPath));
 
-app.use(function(req, res) {
+app.use(process.env.npm_package_config_app_prefix || '/', function(req, res) {
 	res.sendFile(path.join(clientAppPath, 'index.html'));
 });
 

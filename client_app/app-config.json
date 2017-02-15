@@ -1,4 +1,5 @@
 {
 	"apiBaseUri": "/api",
+	"appPrefix": "",
 	"ftApiClientId": ""
 }
