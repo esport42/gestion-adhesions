@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-localize-behavior/app-localize-behavior.html" />
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
 <link rel="import" href="../../bower_components/iron-form/iron-form.html" />
+<link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html" />
 <link rel="import" href="../../bower_components/paper-card/paper-card.html" />
 <link rel="import" href="../../bower_components/paper-input/paper-input.html" />
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html" />
@@ -50,21 +51,24 @@
 
 					<h2>[[localize('heading.form-section.personal-data')]]</h2>
 					<p>
-						<paper-input name="xlogin"
+						<iron-a11y-keys target="[[_gbid('xloginField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="xloginField" name="xlogin"
 							label="[[localize('ui.input.text.xlogin')]]"
 							value="[[ftUser.xlogin]]"
 							readonly
 						></paper-input>
 
 						<div class="layout horizontal">
-							<paper-input
+							<iron-a11y-keys target="[[_gbid('givenNameField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+							<paper-input id="givenNameField"
 								class="flex-6"
 								label="[[localize('ui.input.text.givenName')]]"
 								value="[[ftUser.givenName]]"
 								readonly
 							></paper-input>
 
-							<paper-input
+							<iron-a11y-keys target="[[_gbid('surnameField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+							<paper-input id="surnameField"
 								class="flex-6"
 								label="[[localize('ui.input.text.surname')]]"
 								value="[[ftUser.surname]]"
@@ -72,7 +76,8 @@
 							></paper-input>
 						</div>
 
-						<paper-input name="birthdate" type="date"
+						<iron-a11y-keys target="[[_gbid('birthateField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="birthdateField" name="birthdate" type="date"
 							label="[[localize('ui.input.date.birthdate')]]"
 							required
 							validator="birthdate-validator"
@@ -83,19 +88,22 @@
 
 					<h2>[[localize('heading.form-section.postal-address')]]</h2>
 					<p>
-						<paper-input name="postalAddress"
+						<iron-a11y-keys target="[[_gbid('postalAddressField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="postalAddressField" name="postalAddress"
 							label="[[localize('ui.input.text.postal-address-1')]]"
 							required
 							on-blur="_validate"
 							error-message="[[localize('msg.error.required-field')]]"
 						></paper-input>
 
-						<paper-input name="postalAddressLine2"
+							<iron-a11y-keys target="[[_gbid('postalAddressLine2Field')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11ys-keys>
+						<paper-input id="postalAddressLine2Field" name="postalAddressLine2"
 							label="[[localize('ui.input.text.postal-address-2')]]"
 						></paper-input>
 
 						<div class="layout horizontal">
-							<paper-input name="postcode"
+							<iron-a11y-keys target="[[_gbid('postcodeField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+							<paper-input id="postcodeField" name="postcode"
 								class="flex-4"
 								label="[[localize('ui.input.text.postcode')]]"
 								required
@@ -104,7 +112,8 @@
 								error-message="[[localize('msg.error.invalid-postcode')]]"
 							></paper-input>
 
-							<paper-input name="city"
+							<iron-a11y-keys target="[[_gbid('cityField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+							<paper-input id="cityField" name="city"
 								class="flex-4"
 								label="[[localize('ui.input.text.city')]]"
 								required
@@ -112,7 +121,8 @@
 								error-message="[[localize('msg.error.required-field')]]"
 							></paper-input>
 
-							<country-input name="country"
+							<iron-a11y-keys target="[[_gbid('countryField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+							<country-input id="countryField" name="country"
 								class="flex-4"
 								label="[[localize('ui.input.select.country')]]"
 								value="{{_country}}"
@@ -135,8 +145,9 @@
 							</paper-radio-button>
 						</paper-radio-group>
 
+						<iron-a11y-keys target="[[_gbid('emailField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
 						<!-- If you can understand my regexes, send me your resume -->
-						<paper-input name="email"
+						<paper-input id="emailField" name="email"
 							class="indent"
 							label="[[localize('ui.input.text.email')]]"
 							disabled="[[!_otherEmailEnabled]]"
@@ -150,11 +161,13 @@
 
 					<h2>[[localize('heading.form-section.additional-data')]]</h2>
 					<p>
-						<paper-input name="nick"
+						<iron-a11y-keys target="[[_gbid('nickField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="nickField" name="nick"
 							label="[[localize('ui.input.text.nick')]]"
 						></paper-input>
 
-						<paper-input name="phone"
+						<iron-a11y-keys target="[[_gbid('phoneField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="phoneField" name="phone"
 							label="[[localize('ui.input.text.phone')]]"
 							value="[[ftUser.phone]]"
 							pattern="^(?:(?:(?:0|\+33)[1-79][0-9]{8})|\+(?!33)[0-9]{4,15})$"
@@ -162,7 +175,8 @@
 							on-blur="_validate"
 						></paper-input>
 
-						<paper-input name="steam"
+						<iron-a11y-keys target="[[_gbid('steamField')]]" keys="enter" on-keys-pressed="_submitSignupForm"></iron-a11y-keys>
+						<paper-input id="steamField" name="steam"
 							label="[[localize('ui.input.text.steam')]]"
 						></paper-input>
 					</p>
@@ -241,6 +255,10 @@
 
 			_validate: function(e) {
 				e.target.validate();
+			},
+
+			_gbid: function(id) {
+				return this.$[id];
 			},
 
 			_submitSignupForm: function() {
