@@ -112,8 +112,7 @@ function createMember(api) {
 
 				api.render('welcome-email.ejs', {
 					sender: process.env.npm_package_config_google_user,
-					member: member,
-					discordUrl: 'https://discord.gg/QWW2qZY'
+					member: member
 				}, function(e, d) {
 					if (e) return console.log('Error while rendering welcome-email.ejs', e);
 
