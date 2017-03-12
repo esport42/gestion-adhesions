@@ -11,8 +11,10 @@
     "es42-guys": "./app.js"
   },
   "scripts": {
-    "postinstall": "./scripts/install-client-app.sh",
-	"rebuild-client-app": "./scripts/rebuild-client-app.sh",
+    "postinstall": "npm run init-database; npm run install-client-app",
+	"init-database": "node scripts/init-database.js",
+	"install-client-app": "sh scripts/install-client-app.sh",
+    "rebuild-client-app": "sh scripts/rebuild-client-app.sh",
     "start": "node app.js"
   },
   "config": {
@@ -20,11 +22,17 @@
     "port": "443",
     "insecure_port": "80",
     "app_prefix": "",
-	"serve_app": "true",
+    "serve_app": "true",
     "ft_client_id": "",
     "ft_client_secret": "",
     "google_domain": "esport42.fr",
     "google_user": "",
+	"es42_database_socket_path": "",
+	"es42_database_host": "localhost",
+	"es42_database_port": "3306",
+	"es42_database_user": "",
+	"es42_database_password": "",
+	"es42_database_dbname": "es42guys",
     "soge_author": "",
     "api_request_limit": "20",
     "api_request_limit_period": "60",
@@ -44,6 +52,7 @@
     "ejs": "^2.5.5",
     "express": "^4.14.1",
     "googleapis": "^16.1.0",
+    "mysql": "^2.13.0",
     "pdfkit": "^0.8.0",
     "polymer-cli": "^0.17.0",
     "uuid": "^3.0.1"

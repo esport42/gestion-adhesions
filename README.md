@@ -4,6 +4,7 @@ Sign-up application for E-Sport 42.
 ## Requirements
 To run this app you need:
 * NodeJS and NPM
+* A MySQL database
 * An account on 42 intra (to access the API)
 * Admin access to the G Suite domain you want your users to be added to
 * A TLS (HTTPS) certificate
@@ -57,6 +58,18 @@ If your domain is not esport42.fr, you must also set `google_domain`:
 ```
 npm config set es42-guys:google_domain YOURDOMAIN.COM
 ```
+
+### MySQL
+Set either `es42_database_socket_path` to the path of your MySQL server's socket
+or `es42_database_host` and `es42_database_port` to its address and port, then
+set `es42_database_user` and `es42_database_password` to your MySQL username and
+password.
+
+The app uses the database `es42guys` by default, you can change it by setting
+`es42_database_dbname` to the name of a database.
+
+The required tables will be created by the install scripts if they don't exist.
+If you need to re-create them after install, run `npm run init-database`.
 
 ### TLS Certificate
 Put your certificate and key in `keys/tls-cert.pem` and `keys/tls-key.pem`

@@ -3,6 +3,8 @@ const apiGoogleDirectory = require('./google-directory.js');
 const googleDirectory = new apiGoogleDirectory.GoogleDirectory();
 const apiGoogleMail = require('./google-mail.js');
 const googleMail = new apiGoogleMail.GoogleMail();
+const apiEs42Database = require('./es42-database.js');
+const es42Database = new apiEs42Database.Es42Database();
 const ApiSoge = require('./soge.js');
 const apiSoge = new ApiSoge();
 
@@ -39,7 +41,7 @@ function _validateMember(member) {
 	if (member.surname.length > 40 || !/^[A-Za-z0-9\- ]+$/.test(member.surname))
 		invalidAttributes.push('surname');
 
-	if (member.birthdate === NaN || member.birthdate <= -2208988800000 || member.birthdate >= Date.now())
+	if (member.birthdate.getTime() <= -2208988800000 || member.birthdate.getTime() >= Date.now())
 		invalidAttributes.push('birthdate');
 
 	if (member.phone && !/^\+(?:33[1-79][0-9]{8}|(?!33)[0-9]{4,15})$/.test(member.phone))
@@ -49,14 +51,19 @@ function _validateMember(member) {
 	 * Cannot be Understood normally. Must have No Soul and Sacrifice 3 days to Understand.
 	 * When Modified, inflicts 3000 MB data loss unless the Modifier has Extended Knowledge of Regexes.
 	 */
-	if (!/^(?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+)*|"(?:[^"\\]|\\.)+")@(?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+)*|\[(?:[^[\\\]]|\\.)+\])$/.test(member.email))
+	if (member.email.length > 255 || !/^(?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+)*|"(?:[^"\\]|\\.)+")@(?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+)*|\[(?:[^[\\\]]|\\.)+\])$/.test(member.email))
 		invalidAttributes.push('email');
 
 	if (countries.indexOf(member.country) == -1)
 		invalidAttributes.push('country');
 
-	if (member.country == 'FR' && !/^[0-9]{5}$/.test(member.postcode))
+	if (member.postcode.length > 255 || (member.country == 'FR' && !/^[0-9]{5}$/.test(member.postcode)))
 		invalidAttributes.push('postcode');
+
+	for (attr of ['postalAddress', 'postalAddressLine2', 'city', 'nick', 'steam']) {
+		if (member[attr].length > 255)
+			invalidAttributes.push(attr);
+	}
 
 	return invalidAttributes;
 }
@@ -77,7 +84,7 @@ function createMember(api) {
 			xlogin: req.body.xlogin,
 			givenName: api.locals.ftUsers[req.body.xlogin].givenName,
 			surname: api.locals.ftUsers[req.body.xlogin].surname,
-			birthdate: Date.parse(req.body.birthdate),
+			birthdate: new Date(req.body.birthdate),
 			postalAddress: req.body.postalAddress,
 			postalAddressLine2: req.body.postalAddressLine2 || '',
 			postcode: req.body.postcode,
@@ -97,59 +104,62 @@ function createMember(api) {
 			return next({status: 400, error: 'invalid_parameter',
 				invalidParameter: invalidParameters});
 
-		crypto.randomBytes(15, function(e, d) {
-			if (e) return next({status: 500, error: 'server_error',
-				log: 'Error while generating password ' + JSON.stringify(e)});
 
-			member.password = d.toString('base64');
+		es42Database.insertMember(member, function(e) {
+			if (e) return next(e);
 
-			googleDirectory.insertUser(member, function(e, d) {
-				if (e) return next(e);
+			crypto.randomBytes(15, function(e, d) {
+				if (e) return next({status: 500, error: 'server_error',
+					log: 'Error while generating password ' + JSON.stringify(e)});
 
-				member.googleUser = d;
+				member.password = d.toString('base64');
 
-				/* add to es42 database */
+				googleDirectory.insertUser(member, function(e, d) {
+					if (e) return next(e);
 
-				api.render('welcome-email.ejs', {
-					sender: process.env.npm_package_config_google_user,
-					member: member
-				}, function(e, d) {
-					if (e) return console.log('Error while rendering welcome-email.ejs', e);
+					member.googleUser = d;
 
-					googleMail.sendMail(d, function(err) {
-						if (err) console.log(err.log);
+					api.render('welcome-email.ejs', {
+						sender: process.env.npm_package_config_google_user,
+						member: member
+					}, function(e, d) {
+						if (e) return console.log('Error while rendering welcome-email.ejs', e);
+
+						googleMail.sendMail(d, function(err) {
+							if (err) console.log(err.log);
+						});
 					});
+
+					if (member.soge) {
+						apiSoge.getSogeHostingForm(function(e, d) {
+							if (e) return console.log(e.log);
+
+							var sogeHostingForm = d;
+
+							apiSoge.generateSogeCertificate(member, function(e, d) {
+								if (e) return console.log(e.log);
+
+								api.render('soge-email.ejs', {
+									sender: process.env.npm_package_config_google_user,
+									member: member,
+									sogeAuthor: process.env.npm_package_config_soge_author,
+									sogeCertificate: d,
+									sogeHosting: sogeHostingForm
+								}, function(e, d) {
+									if (e) return console.log('Error while rendering soge-email.ejs', e);
+
+									googleMail.sendMail(d, function(err) {
+										if (err) console.log(err.log);
+									});
+								});
+							});
+						});
+					}
+
+					delete member.password;
+
+					res.status(201).json(member);
 				});
-
-				if (member.soge) {
-                    apiSoge.getSogeHostingForm(function(e, d) {
-                        if (e) return console.log(e.log);
-
-                        var sogeHostingForm = d;
-
-                        apiSoge.generateSogeCertificate(member, function(e, d) {
-                            if (e) return console.log(e.log);
-
-                            api.render('soge-email.ejs', {
-                                sender: process.env.npm_package_config_google_user,
-                                member: member,
-                                sogeAuthor: process.env.npm_package_config_soge_author,
-                                sogeCertificate: d,
-                                sogeHosting: sogeHostingForm
-                            }, function(e, d) {
-                                if (e) return console.log('Error while rendering soge-email.ejs', e);
-
-                                googleMail.sendMail(d, function(err) {
-                                    if (err) console.log(err.log);
-                                });
-                            });
-                        });
-                    });
-				}
-
-				delete member.password;
-
-				res.status(201).json(member);
 			});
 		});
 	};
