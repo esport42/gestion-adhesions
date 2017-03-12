@@ -2,7 +2,7 @@
   "name": "es42-guys",
   "version": "0.1.0",
   "description": "E-Sport 42's Give Us Your Soul app",
-  "homepage": "https://github.com/ays388/es42-guys#readme",
+  "homepage": "https://github.com/esport42/gestion-adhesions#readme",
   "author": "Arthur Speer <aspeer@esport42.fr>",
   "license": "MIT",
   "private": true,
@@ -41,10 +41,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ays388/es42-guys.git"
+    "url": "git+https://github.com/esport42/gestion-adhesions.git"
   },
   "bugs": {
-    "url": "https://github.com/ays388/es42-guys/issues"
+    "url": "https://github.com/esport42/gestion-adhesions/issues"
   },
   "dependencies": {
     "body-parser": "^1.16.0",
